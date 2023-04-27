@@ -1,0 +1,41 @@
+security:
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: username
+    firewalls:
+        login:
+            pattern: ^/api/authentication
+            stateless: true
+            json_login:
+                check_path: /api/authentication
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+        api:
+            pattern: ^/api
+            stateless: true
+            jwt: ~
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        - { path: ^/api/create, roles: ROLE_ADMIN }
+        - { path: ^/api/authentication, roles: PUBLIC_ACCESS }
+        - { path: ^/api/get, roles: PUBLIC_ACCESS }
+        - { path: ^/api/delete, roles: ROLE_ADMIN }
+        - { path: ^/api/update, roles: PUBLIC_ACCESS }
+
+    password_hashers:
+        # a hasher used in the past for some users
+        legacy:
+            algorithm: sha256
+            encode_as_base64: false
+            iterations: 1
+
+        App\Entity\User:
+            # the new hasher, along with its options
+            algorithm: sodium
+            migrate_from:
+                - bcrypt # uses the "bcrypt" hasher with the default options
+                - legacy # uses the "legacy" hasher configured above

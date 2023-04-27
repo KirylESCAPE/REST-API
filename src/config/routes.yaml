@@ -1,0 +1,22 @@
+create:
+    path: /api/create
+    controller: App\Controller\UserController::create
+    methods: POST
+
+update:
+    path: /api/update
+    controller: App\Controller\UserController::update
+    methods: PUT
+
+get:
+    path: /api/users
+    controller: App\Controller\UserController::getAll
+    methods: GET
+
+delete:
+    path: /api/delete
+    controller: App\Controller\UserController::delete
+
+authentication:
+    path: /api/authentication
+    controller: App\Controller\UserController::getTokenUser
